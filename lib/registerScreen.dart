@@ -12,14 +12,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController email = TextEditingController();
   TextEditingController senha = TextEditingController();
 
+
   Future<void> cadastrarFirebase() async {
     try {
       var credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email.text,
         password: senha.text,
       );
-      print(credential.user?.email);
-
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Usuário registrado com sucesso!'),
@@ -45,7 +44,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     email.dispose();
     senha.dispose();
-    super.dispose();
   }
 
   @override
@@ -61,9 +59,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             SizedBox(height: 20),
             TextField(
               controller: email,
+              maxLines: 1,
               decoration: InputDecoration(
                 labelText: 'E-mail',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 2.0,
+                  )
+                ),
               ),
             ),
             TextField(

@@ -1,4 +1,5 @@
 import 'package:firebase_28_5/HomeScreen.dart';
+import 'package:firebase_28_5/homeLogin.dart';
 import 'package:firebase_28_5/loginScreen.dart';
 import 'package:firebase_28_5/registerScreen.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ Future<void> main() async {
       "/home": (_) => HomeScreen(),
       "/register": (_) => RegisterScreen(),
       "/login": (_) => LoginScreen(),
-      "/homeLogin": (_) => LoginScreen(),
+      "/homeLogin": (_) => HomeLogin(),
 
 
     }
