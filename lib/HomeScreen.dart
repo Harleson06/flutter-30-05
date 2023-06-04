@@ -1,18 +1,34 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bem Vindo!'),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'login') {
+                Navigator.of(context).pushNamed('/login');
+              } else if (value == 'register') {
+                Navigator.of(context).pushNamed('/register');
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'login',
+                child: Text('Logar'),
+              ),
+              const PopupMenuItem(
+                value: 'register',
+                child: Text('Registrar'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Center(
         child: Container(
@@ -65,4 +81,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

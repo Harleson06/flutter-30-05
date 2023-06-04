@@ -12,7 +12,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController email = TextEditingController();
   TextEditingController senha = TextEditingController();
 
-
   Future<void> cadastrarFirebase() async {
     try {
       var credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -36,14 +35,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     email.dispose();
     senha.dispose();
+    super.dispose();
   }
 
   @override
@@ -51,6 +46,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Página de Cadastro'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(32, 15, 32, 10),
@@ -63,12 +64,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               decoration: InputDecoration(
                 labelText: 'E-mail',
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 2.0,
-                  )
+                    borderSide: BorderSide(
+                      width: 2.0,
+                    )
                 ),
               ),
             ),
+            SizedBox(height: 10),
             TextField(
               controller: senha,
               decoration: InputDecoration(

@@ -1,4 +1,5 @@
 import 'package:firebase_28_5/HomeScreen.dart';
+import 'package:firebase_28_5/alterarSenha.dart';
 import 'package:firebase_28_5/homeLogin.dart';
 import 'package:firebase_28_5/loginScreen.dart';
 import 'package:firebase_28_5/registerScreen.dart';
@@ -20,6 +21,7 @@ Future<void> main() async {
       "/register": (_) => RegisterScreen(),
       "/login": (_) => LoginScreen(),
       "/homeLogin": (_) => HomeLogin(),
+      "senhalogin": (_) => SenhaScreen(),
 
 
     }
