@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_28_5/repoLivro.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +24,7 @@ Future<void> main() async {
       "/login": (_) => LoginScreen(),
       "/homeLogin": (_) => HomeLogin(),
       "senhalogin": (_) => SenhaScreen(),
+      "livros": (_) => RepoLivro(),
 
 
     }

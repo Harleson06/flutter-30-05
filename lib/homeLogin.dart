@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'repoLivro.dart';
+
 class HomeLogin extends StatefulWidget {
   const HomeLogin({Key? key}) : super(key: key);
 
@@ -28,9 +30,7 @@ class _HomeLoginState extends State<HomeLogin> {
     final String autorLivro = autorLivroController.text;
     final String descricaoLivro = descricaoLivroController.text;
 
-    if (nomeLivro.isNotEmpty &&
-        autorLivro.isNotEmpty &&
-        descricaoLivro.isNotEmpty) {
+    if (nomeLivro.isNotEmpty && autorLivro.isNotEmpty && descricaoLivro.isNotEmpty) {
       final livro = {
         'nome': nomeLivro,
         'autor': autorLivro,
@@ -43,16 +43,6 @@ class _HomeLoginState extends State<HomeLogin> {
       autorLivroController.clear();
       descricaoLivroController.clear();
     }
-  }
-
-  Future<void> emprestarLivro(String livroId) async {
-    // Atualizar o livro com o status de empréstimo
-    await livrosCollection.doc(livroId).update({'emprestado': true});
-  }
-
-  Future<void> devolverLivro(String livroId) async {
-    // Atualizar o livro com o status de devolução
-    await livrosCollection.doc(livroId).update({'emprestado': false});
   }
 
   @override
@@ -123,23 +113,11 @@ class _HomeLoginState extends State<HomeLogin> {
                     itemCount: livros.length,
                     itemBuilder: (context, index) {
                       final livro = livros[index].data();
-                      final livroId = livros[index].id;
-                      final bool emprestado = livro['emprestado'] ?? false;
                       return ListTile(
                         title: Text(livro['nome']?.toString() ?? ''),
                         subtitle: Text(livro['autor']?.toString() ?? ''),
                         leading: CircleAvatar(
-                          backgroundImage:
-                          NetworkImage(livro['fotoUrl']?.toString() ?? ''),
-                        ),
-                        trailing: emprestado
-                            ? ElevatedButton(
-                          onPressed: () => devolverLivro(livroId),
-                          child: Text('Devolver'),
-                        )
-                            : ElevatedButton(
-                          onPressed: () => emprestarLivro(livroId),
-                          child: Text('Emprestar'),
+                          backgroundImage: NetworkImage(livro['fotoUrl']?.toString() ?? ''),
                         ),
                       );
                     },
@@ -151,6 +129,15 @@ class _HomeLoginState extends State<HomeLogin> {
                 }
               },
             ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RepoLivro()),
+              );
+            },
+            child: Text('Ir para RepoLivro'),
           ),
         ],
       ),
