@@ -4,6 +4,20 @@ import 'package:flutter/material.dart';
 class RepoLivro extends StatelessWidget {
   const RepoLivro({Key? key}) : super(key: key);
 
+  Future<void> emprestarLivro(String livroId) async {
+    await FirebaseFirestore.instance
+        .collection('livros')
+        .doc(livroId)
+        .update({'emprestado': true});
+  }
+
+  Future<void> devolverLivro(String livroId) async {
+    await FirebaseFirestore.instance
+        .collection('livros')
+        .doc(livroId)
+        .update({'emprestado': false});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,11 +34,20 @@ class RepoLivro extends StatelessWidget {
               itemCount: livros.length,
               itemBuilder: (context, index) {
                 final livro = livros[index].data();
+                final livroId = livros[index].id;
+                final bool emprestado = livro['emprestado'] ?? false;
 
                 return ListTile(
                   title: Text(livro['nome']?.toString() ?? ''),
                   subtitle: Text(livro['autor']?.toString() ?? ''),
-                  // Outras informações do livro
+                  trailing: emprestado ? Text('Emprestado') : Text('Disponível'),
+                  onTap: () {
+                    if (emprestado) {
+                      devolverLivro(livroId);
+                    } else {
+                      emprestarLivro(livroId);
+                    }
+                  },
                 );
               },
             );

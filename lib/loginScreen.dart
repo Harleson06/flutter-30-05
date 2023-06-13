@@ -13,6 +13,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController email = TextEditingController();
   TextEditingController senha = TextEditingController();
+  bool obscureText = true;
 
   Future<void> loginFirebase() async {
     var credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -116,11 +117,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
+            SizedBox(height: 10),
             TextField(
               controller: senha,
+              obscureText: obscureText,
               decoration: InputDecoration(
                 label: Text('Senha'),
                 border: OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility),
+                  onPressed: () {
+                    setState(() {
+                      obscureText = !obscureText;
+                    });
+                  },
+                ),
               ),
             ),
             SizedBox(height: 20,),

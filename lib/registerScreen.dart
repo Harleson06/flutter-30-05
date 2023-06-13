@@ -12,6 +12,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController email = TextEditingController();
   TextEditingController senha = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+  bool _emailValido = true; // Inicialmente definido como verdadeiro
+  bool _formValido = false;
+
+  bool validarEmail(String email) {
+    if (email.contains('@')) {
+      return true; // Retornar true quando o e-mail contém o caractere '@'
+    }
+    return false;
+  }
+
+  void _atualizarFormularios() {
+    setState(() {
+      _emailValido = validarEmail(email.text);
+      _formValido = _formKey.currentState!.validate();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    email.addListener(_atualizarFormularios);
+  }
+
   Future<void> cadastrarFirebase() async {
     try {
       var credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -39,6 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     email.dispose();
     senha.dispose();
     super.dispose();
+    email.removeListener(_atualizarFormularios);
   }
 
   @override
@@ -58,24 +83,62 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Column(
           children: [
             SizedBox(height: 20),
-            TextField(
-              controller: email,
-              maxLines: 1,
-              decoration: InputDecoration(
-                labelText: 'E-mail',
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      width: 2.0,
-                    )
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: senha,
-              decoration: InputDecoration(
-                labelText: 'Senha',
-                border: OutlineInputBorder(),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: email,
+                    decoration: InputDecoration(
+                      errorStyle: TextStyle(
+                        color: _emailValido ? Colors.blueAccent : Colors.red,
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: _emailValido ? Colors.blueAccent : Colors.red,
+                        ),
+                      ),
+                      labelText: 'E-mail',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _emailValido = validarEmail(value);
+                        _formValido = _formKey.currentState!.validate();
+                      });
+                    },
+                    validator: (String? email) {
+                      if (email == null || email.isEmpty) {
+                        return 'Por favor preencha o campo';
+                      } else if (!_emailValido) {
+                        return 'E-mail Inválido';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: senha,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Senha',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _formValido = _formKey.currentState!.validate();
+                      });
+                    },
+                    validator: (String? senha) {
+                      if (senha == null || senha.isEmpty) {
+                        return 'Por favor preencha o campo';
+                      } else if (senha.length < 8) {
+                        return 'A senha deve ter no mínimo 8 caracteres';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 20),
